@@ -1,0 +1,252 @@
+[
+  {
+    "name": "col_0",
+    "type": "INTEGER",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "col_1",
+    "type": "FLOAT",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "col_2",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "col_3",
+    "type": "BOOLEAN",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "col_4",
+    "type": "DATE",
+    "mode": "NULLABLE" 
+  },
+  {
+    "name": "col_5",
+    "type": "TIMESTAMP",
+    "mode": "NULLABLE" 
+  },
+  {
+    "name": "col_6",
+    "type": "INTEGER",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "col_7",
+    "type": "FLOAT",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "col_8",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "col_9",
+    "type": "BOOLEAN",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "col_10",
+    "type": "DATE",
+    "mode": "NULLABLE" 
+  },
+  {
+    "name": "col_11",
+    "type": "TIMESTAMP",
+    "mode": "NULLABLE" 
+  },
+  {
+    "name": "col_12",
+    "type": "INTEGER",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "col_13",
+    "type": "FLOAT",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "col_14",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "col_15",
+    "type": "BOOLEAN",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "col_16",
+    "type": "DATE",
+    "mode": "NULLABLE" 
+  },
+  {
+    "name": "col_17",
+    "type": "TIMESTAMP",
+    "mode": "NULLABLE" 
+  },
+  {
+    "name": "col_18",
+    "type": "INTEGER",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "col_19",
+    "type": "FLOAT",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "col_20",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "col_21",
+    "type": "BOOLEAN",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "col_22",
+    "type": "DATE",
+    "mode": "NULLABLE" 
+  },
+  {
+    "name": "col_23",
+    "type": "TIMESTAMP",
+    "mode": "NULLABLE" 
+  },
+  {
+    "name": "col_24",
+    "type": "INTEGER",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "col_25",
+    "type": "FLOAT",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "col_26",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "col_27",
+    "type": "BOOLEAN",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "col_28",
+    "type": "DATE",
+    "mode": "NULLABLE" 
+  },
+  {
+    "name": "col_29",
+    "type": "TIMESTAMP",
+    "mode": "NULLABLE" 
+  },
+  {
+    "name": "col_30",
+    "type": "INTEGER",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "col_31",
+    "type": "FLOAT",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "col_32",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "col_33",
+    "type": "BOOLEAN",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "col_34",
+    "type": "DATE",
+    "mode": "NULLABLE" 
+  },
+  {
+    "name": "col_35",
+    "type": "TIMESTAMP",
+    "mode": "NULLABLE" 
+  },
+  {
+    "name": "col_36",
+    "type": "INTEGER",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "col_37",
+    "type": "FLOAT",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "col_38",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "col_39",
+    "type": "BOOLEAN",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "col_40",
+    "type": "DATE",
+    "mode": "NULLABLE" 
+  },
+  {
+    "name": "col_41",
+    "type": "TIMESTAMP",
+    "mode": "NULLABLE" 
+  },
+  {
+    "name": "col_42",
+    "type": "INTEGER",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "col_43",
+    "type": "FLOAT",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "col_44",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "col_45",
+    "type": "BOOLEAN",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "col_46",
+    "type": "DATE",
+    "mode": "NULLABLE" 
+  },
+  {
+    "name": "col_47",
+    "type": "TIMESTAMP",
+    "mode": "NULLABLE" 
+  },
+  {
+    "name": "col_48",
+    "type": "INTEGER",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "col_49",
+    "type": "FLOAT",
+    "mode": "NULLABLE"
+  }
+]
