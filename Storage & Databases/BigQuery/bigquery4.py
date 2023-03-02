@@ -1,162 +1,98 @@
 from google.cloud import bigquery
 from google.cloud import storage
 from google.oauth2 import service_account
+import sys
 
 
 # Set key_path to the path of the google storage service account keyfile.
-key_path = "keys/gsa_keyfile.json"
+if len(sys.argv) == 3:
+    storageKey_path = sys.argv[1]
+    bigqueryKey_path = sys.argv[2]
+else:    
+    storageKey_path = "keys/gsa_keyfile.json"
+    bigqueryKey_path = "keys/bigquerySA_key.json"
 
-# To authenticate with a service account key file create credentials. 
-credentials = service_account.Credentials.from_service_account_file(
-    key_path, scopes=["https://www.googleapis.com/auth/cloud-platform"],
-)
+# To authenticate with a service account key file create credentials.
+def authenticateServiceAccount(key_path):
+    try:
+        credentials = service_account.Credentials.from_service_account_file(
+            key_path, scopes=["https://www.googleapis.com/auth/cloud-platform"],
+        )
+        return credentials
+    except Exception as e:
+        print(f"Failed to authenticate with service account key file: {e}")
+        return None
 
-# Create google storage client
-gs_client = storage.Client(credentials=credentials)
+try:
+    credentials = authenticateServiceAccount(storageKey_path) 
+    bucket_name = "viraj-patil-netflix"
+    file_name = "netflix-rotten-tomatoes-metacritic-imdb.csv"
 
-bucket_name = "viraj-patil-netflix"
-location = "us-central1"
-storage_class = "standard"
+    def storageOperations(credentials):
 
-# Create storage bucket 
-bucket = gs_client.create_bucket(bucket_name,location=location)
+        if credentials==None:
+            return
+        
+        # Create google storage client
+        gs_client = storage.Client(credentials=credentials)
 
-# Verify bucket is created successfully
-print("Bucket {} created".format(bucket.name))
+        location = "us-central1"
+        storage_class = "standard"
 
-# Create a blob object that represents the file
-file_name = "netflix-rotten-tomatoes-metacritic-imdb.csv"
+        # Create storage bucket 
+        bucket = gs_client.create_bucket(bucket_name,location=location)
 
-blob = bucket.blob(file_name)
+        # Verify bucket is created successfully
+        print("Bucket {} created".format(bucket.name))
 
-# Upload the file to the bucket
-local_file_path = "./netflix-rotten-tomatoes-metacritic-imdb.csv"
+        # Create a blob object that represents the file
+        blob = bucket.blob(file_name)
 
-blob.upload_from_filename(local_file_path)
+        # Upload the file to the bucket
+        local_file_path = "./netflix-rotten-tomatoes-metacritic-imdb.csv"
 
+        blob.upload_from_filename(local_file_path)
 
-# Set key_path to the path of the BigQuery service account keyfile.
-key_path = "keys/bigquerySA_key.json"
+    storageOperations(credentials)
+except Exception as e:
+    print(f"Error occurred while performing storage operations: {e}")
+    sys.exit(1)
 
-# To authenticate with a service account key file create credentials. 
-credentials = service_account.Credentials.from_service_account_file(
-    key_path, scopes=["https://www.googleapis.com/auth/cloud-platform"],
-)
+# To authenticate with a bigquery service account
+try:
+    credentials = authenticateServiceAccount(bigqueryKey_path)
 
-# Get the bucket IAM policy
-#policy = bucket.get_iam_policy(requested_policy_version=3)
+    def bigqueryOperations(credentials):
 
-# Add a new binding to the policy with the storage.objectViewer role and the specified service account
-#policy.bindings.append({
-#    "role": "roles/storage.objectViewer",
-#    "members": {"serviceAccount":"serviceAccount:bqadminsa@viraj-patil-bootcamp.iam.gserviceaccount.com"},
-#})
+        if credentials==None:
+            return
+        
+        # Create a BigQuery Client using the credentials.
+        bq_client = bigquery.Client(credentials=credentials,project=credentials.project_id)
 
-# Update the bucket IAM policy
-#bucket.set_iam_policy(policy)
+        # Define the dataset and table references
+        dataset_name = 'netflix'
+        table_name = 'netflix-raw-data'
 
-# Create a BigQuery Client using the credentials.
-bq_client = bigquery.Client(credentials=credentials,project=credentials.project_id)
+        # Create the dataset
+        dataset = bigquery.Dataset(bq_client.dataset(dataset_name))
+        dataset.location = 'US'
+        dataset.default_table_expiration_ms = 30 * 24 * 60 * 60 * 1000  # 30 days
+        dataset = bq_client.create_dataset(dataset)
 
-# Define the dataset and table references
-dataset_name = 'netflix'
-table_name = 'netflix-raw-data'
+        # Load data from Google Cloud Storage to BigQuery
+        job_config = bigquery.LoadJobConfig()
+        job_config.autodetect = True
+        job_config.source_format = bigquery.SourceFormat.CSV
 
-# Create the dataset
-dataset = bigquery.Dataset(bq_client.dataset(dataset_name))
-dataset.location = 'US'
-dataset.default_table_expiration_ms = 30 * 24 * 60 * 60 * 1000  # 30 days
-dataset = bq_client.create_dataset(dataset)
+        uri = "gs://{}/{}".format(bucket_name, file_name)
+        load_job = bq_client.load_table_from_uri(
+            uri, dataset.table(table_name), job_config=job_config
+        )
 
-# Load data from Google Cloud Storage to BigQuery
-job_config = bigquery.LoadJobConfig()
-job_config.autodetect = True
-job_config.source_format = bigquery.SourceFormat.CSV
+        load_job.result()
 
-uri = "gs://{}/{}".format(bucket_name, file_name)
-load_job = bq_client.load_table_from_uri(
-    uri, dataset.table(table_name), job_config=job_config
-)
-
-load_job.result()
-
-# # Write query to create a view of title count in each country availability group by run time 
-# view_name="view_titles_by_country_runtime"
-# sql_query = f"""
-# CREATE VIEW {dataset_name}.{view_name} AS
-# SELECT
-#   Country Availability,
-#   Runtime,
-#   COUNT(Title) AS Titles_Count
-# FROM
-#   {dataset_name}.{table_name}
-# GROUP BY
-#   Country Availability, Runtime
-# """
-
-# # Execute the SQL statement to create the view
-# bq_client.query(sql_query).result()
-
-
-# # Confirm that the view was created
-# print(f"View {dataset_name}.{view_name} was created.")
-
-# # Write a query to create view of no. titles for each actor.
-# view_name="view_titles_by_actor"
-# sql_query = f"""
-# WITH actors AS (
-#   SELECT Actor, Title
-#   FROM {dataset_name}.{table_name}, UNNEST(SPLIT(Actors, ',')) AS Actor
-# )
-# CREATE VIEW {dataset_name}.{view_name} AS
-# SELECT Actor, COUNT(Title) AS title_count
-# FROM actors
-# GROUP BY Actor
-# """
-
-# # Execute the SQL statement to create the view
-# bq_client.query(sql_query).result()
-
-
-# # Confirm that the view was created
-# print(f"View {dataset_name}.{view_name} was created.")
-
-# # Write a query to create view of no. titles for each genre
-# view_name="view_titles_by_genre"
-# sql_query = f"""
-# WITH genres AS (
-#   SELECT Genre, Title
-#   FROM {dataset_name}.{table_name}, UNNEST(SPLIT(Genre, ',')) AS Genre
-# )
-# CREATE VIEW {dataset_name}.{view_name} AS
-# SELECT Genre, COUNT(Title) AS title_count
-# FROM genres
-# GROUP BY Genre
-# """
-
-# # Execute the SQL statement to create the view
-# bq_client.query(sql_query).result()
-
-
-# # Confirm that the view was created
-# print(f"View {dataset_name}.{view_name} was created.")
-
-# # create View : Find out the number of Titles available in each Country Availability by Genre.
-# view_name="view_titles_by_country_gener"
-# sql_query = f"""
-# WITH genres AS (
-#   SELECT Genre, Title, Country Availability
-#   FROM {dataset_name}.{table_name}, UNNEST(SPLIT(Genre, ',')) AS Genre
-# )
-# CREATE VIEW {dataset_name}.{view_name} AS
-# SELECT Country Availability, Genre, COUNT(Title) AS title_count
-# FROM geners
-# GROUP BY Country Availability,Genre
-# """
-
-# # Execute the SQL statement to create the view
-# bq_client.query(sql_query).result()
-
-
-# # Confirm that the view was created
-# print(f"View {dataset_name}.{view_name} was created.")
+    bigqueryOperations(credentials)
+except Exception as e:
+    print(f"Error occurred while performing BigQuery operations: {e}")
+    sys.exit(1)

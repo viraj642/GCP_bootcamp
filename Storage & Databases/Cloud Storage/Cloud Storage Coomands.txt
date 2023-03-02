@@ -6,3 +6,7 @@ gcloud compute scp --verbosity=debug --recurse data.csv 10.8.0.3:/home/virajpati
 *****************************************************SERVICE ACCOUNT KEYS, ROLES AND AUTH*******************************************
 
 gcloud iam service-accounts keys create keys/gsc_key.json --iam-account=gcsadminsa@viraj-patil-bootcamp.iam.gserviceaccount.com
+
+gcloud auth activate-service-account --key-file=keys/gsa_keyfile.json
+
+gsutil mb -c standard -l us-central1 gs://viraj-patil-fagcpbcmp
