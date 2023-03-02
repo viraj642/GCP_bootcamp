@@ -1,0 +1,16 @@
+# Create VPC network
+gcloud compute networks create vpc-bootcamp-test --project=viraj-patil-bootcamp --subnet-mode=custom --mtu=1460 --bgp-routing-mode=regional
+
+# Create Subnets
+gcloud compute networks subnets create test-subnet1 --project=viraj-patil-bootcamp --range=10.0.0.0/13 --stack-type=IPV4_ONLY --network=vpc-bootcamp-test --region=us-central1
+
+gcloud compute networks subnets create test-subnet2 --project=viraj-patil-bootcamp --range=10.8.0.0/13 --stack-type=IPV4_ONLY --network=vpc-bootcamp-test --region=us-central1
+
+# Create Firewall Rules
+gcloud compute firewall-rules create vpc-bootcamp-test-allow-custom --project=viraj-patil-bootcamp --network=projects/viraj-patil-bootcamp/global/networks/vpc-bootcamp-test --description=Allows\ connection\ from\ any\ source\ to\ any\ instance\ on\ the\ network\ using\ custom\ protocols. --direction=INGRESS --priority=65534 --source-ranges=10.0.0.0/13,10.8.0.0/13 --action=ALLOW --rules=all
+
+gcloud compute firewall-rules create vpc-bootcamp-test-allow-icmp --project=viraj-patil-bootcamp --network=projects/viraj-patil-bootcamp/global/networks/vpc-bootcamp-test --description=Allows\ ICMP\ connections\ from\ any\ source\ to\ any\ instance\ on\ the\ network. --direction=INGRESS --priority=65534 --source-ranges=0.0.0.0/0 --action=ALLOW --rules=icmp
+
+gcloud compute firewall-rules create vpc-bootcamp-test-allow-rdp --project=viraj-patil-bootcamp --network=projects/viraj-patil-bootcamp/global/networks/vpc-bootcamp-test --description=Allows\ RDP\ connections\ from\ any\ source\ to\ any\ instance\ on\ the\ network\ using\ port\ 3389. --direction=INGRESS --priority=65534 --source-ranges=0.0.0.0/0 --action=ALLOW --rules=tcp:3389
+
+gcloud compute firewall-rules create vpc-bootcamp-test-allow-ssh --project=viraj-patil-bootcamp --network=projects/viraj-patil-bootcamp/global/networks/vpc-bootcamp-test --description=Allows\ TCP\ connections\ from\ any\ source\ to\ any\ instance\ on\ the\ network\ using\ port\ 22. --direction=INGRESS --priority=65534 --source-ranges=0.0.0.0/0 --action=ALLOW --rules=tcp:22

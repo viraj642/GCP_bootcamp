@@ -1,0 +1,8 @@
+# FILE TRANSFER
+gcloud compute scp data.csv vm2ce:/home/virajpatil642/ --zone us-central1-a
+
+gcloud compute scp --verbosity=debug --recurse data.csv 10.8.0.3:/home/virajpatil642/ --zone us-central1-a
+
+*****************************************************SERVICE ACCOUNT KEYS, ROLES AND AUTH*******************************************
+
+gcloud iam service-accounts keys create keys/gsc_key.json --iam-account=gcsadminsa@viraj-patil-bootcamp.iam.gserviceaccount.com

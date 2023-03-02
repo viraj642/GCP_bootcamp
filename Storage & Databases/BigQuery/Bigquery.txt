@@ -1,0 +1,10 @@
+***************************************************BIGQUERY1******************************************************
+
+# Create Bucket
+bq --location=US mk --default_table_expiration 2592000 NAME
+
+# Load data to cretae table 
+bq load --source_format=CSV --autodetect --time_partitioning_field "column_name" --time_partitioning_type DAY  partition_comp.version1 gs://viraj-patil-fagcpbcmp/sourcefile1.csv
+
+
+select * from `viraj-patil-bootcamp.partition_comp.INFORMATION_SCHEMA.PARTITIONS`;
